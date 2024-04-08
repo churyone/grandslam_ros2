@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="grandslam">
+
+  <!-- COLOR -->
+    <material name="white">
+        <color rgba="1 1 1 1" />
+    </material>
+
+    <material name="red">
+        <color rgba="1 0 0 1" />
+    </material>
+
+    <material name="blue">
+       <color rgba="0 1 0 1" />
+    </material>
+
+    <material name="green">
+        <color rgba="0 0 1 1" />
+    </material>
+  <!-- Base -->
+  <link name = "base_link">
+  </link>
+
+  <!--odom LINK-->
+
+  <joint name="odom_link" type="fixed">
+    <parent link="odom"/>
+    <child link ="base_link"/>
+  </joint>
+
+  <!-- BODY LINK -->
+  <joint name="body_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="body"/>
+  </joint>
+
+  <!--sensor_box LINK-->
+  <joint name="sensor_box_link" type="fixed">
+    <origin xyz="0.0 -0.1 0.335" rpy="0.0 0.0 0.0"/>
+    <parent link="body"/>
+    <child link ="sensor_box"/>
+  </joint>
+
+  <!--laser LINK-->
+  <joint name="laser_link" type="fixed">
+    <origin xyz="0.0 0.0 0.1255"/>
+    <parent link="sensor_box"/>
+    <child link ="laser"/>
+  </joint>
+
+  <!--imu LINK-->
+  <joint name="imu_link" type="fixed">
+    <parent link="sensor_box"/>
+    <child link ="imu"/>
+  </joint>
+
+  <!-- Body -->
+  <link name="body">
+    <visual>
+      <geometry>
+        <box size="0.75 1.30 0.47"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+  </link>
+
+  <!-- sensor_box -->
+  <link name="sensor_box">
+    <visual>
+      <geometry>
+        <box size="0.4 0.3 0.2"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+
+  <!-- laser -->
+  <link name="laser" type="fixed">
+    <visual>
+      <geometry>
+        <cylinder radius="0.0555" length="0.051"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <!--imu_link-->
+  <link name="imu">
+  </link>
+
+  <!--odom-->
+  <link name="odom">
+  </link>
+</robot>
