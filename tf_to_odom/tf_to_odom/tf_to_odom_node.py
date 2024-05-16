@@ -1,15 +1,22 @@
 import rclpy
 from rclpy.node import Node
+#TransformListener는 TF데이터를 수신, Buffer는 TF데이터를 저장하고 관리
 from tf2_ros import TransformListener, Buffer
+#Odometry타입 메시지 사용
 from nav_msgs.msg import Odometry
+#TF트랜스폼 데이터 나타내기 위해 사용
 from geometry_msgs.msg import TransformStamped
 
+#Node 클래스를 상속받아 TFToOdometryNode 정의
 class TFToOdometryNode(Node):
+    #클래스 초기화 메소드 정의, 부모 클래스인 노드를 초기화 후 노드의 이름을 tf_to_odometry_node로 설정, 이때 self는 인스턴스 자신을 참조
     def __init__(self):
         super().__init__('tf_to_odometry_node')
         
         # Create a buffer and transform listener
+        #인스턴스 자신에 tf_buffer라는 객체 생성, Buffer()를 생성자로 함
         self.tf_buffer = Buffer()
+        #인스턴스 자신에 tf_listener라는 객체 생성, TransformListener()를 생성자로 함
         self.tf_listener = TransformListener(self.tf_buffer, self)
         
         # Create a publisher for the odometry data
