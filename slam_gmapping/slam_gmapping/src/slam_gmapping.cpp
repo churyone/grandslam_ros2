@@ -515,8 +515,22 @@ void SlamGmapping::updateMap(const sensor_msgs::msg::LaserScan::ConstSharedPtr s
 void SlamGmapping::publishTransform()
 {
     map_to_odom_mutex_.lock();
+    /*
     rclcpp::Time tf_expiration = get_clock()->now() + rclcpp::Duration(
-            static_cast<int32_t>(static_cast<rcl_duration_value_t>(tf_delay_)), 0);
+        static_cast<int32_t>(static_cast<rcl_duration_value_t>(tf_delay_)), 0);
+    */
+    /*
+    rclcpp::Time tf_expiration = get_clock()->now();  // 현재 시간을 타임스탬프로 설정
+    //logging용 코드
+    RCLCPP_INFO(this->get_logger(), "Current time: sec: %d, nanosec: %d", tf_expiration.seconds(), tf_expiration.nanoseconds());
+    */
+   //수정된 코드
+    auto now = std::chrono::system_clock::now();
+    auto now_sec = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count();
+    auto now_nsec = std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count() % 1000000000;
+
+    rclcpp::Time tf_expiration(now_sec, now_nsec);
+
     geometry_msgs::msg::TransformStamped transform;
     transform.header.frame_id = map_frame_;
     transform.header.stamp = tf_expiration;

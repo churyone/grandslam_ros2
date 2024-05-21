@@ -17,27 +17,20 @@
     <material name="green">
         <color rgba="0 0 1 1" />
     </material>
-  <!-- Base -->
-  <link name = "base_link">
+  <!-- Base_footprint -->
+  <link name = "base_footprint">
   </link>
 
-  <!--odom LINK-->
-
-  <joint name="odom_link" type="fixed">
-    <parent link="odom"/>
-    <child link ="base_link"/>
-  </joint>
-
-  <!-- BODY LINK -->
-  <joint name="body_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="body"/>
+  <!-- base_link LINK -->
+  <joint name="base_link_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
   </joint>
 
   <!--sensor_box LINK-->
   <joint name="sensor_box_link" type="fixed">
     <origin xyz="0.0 -0.1 0.335" rpy="0.0 0.0 0.0"/>
-    <parent link="body"/>
+    <parent link="base_link"/>
     <child link ="sensor_box"/>
   </joint>
 
@@ -54,8 +47,8 @@
     <child link ="imu"/>
   </joint>
 
-  <!-- Body -->
-  <link name="body">
+  <!-- base_link -->
+  <link name="base_link">
     <visual>
       <geometry>
         <box size="0.75 1.30 0.47"/>
@@ -88,7 +81,4 @@
   <link name="imu">
   </link>
 
-  <!--odom-->
-  <link name="odom">
-  </link>
 </robot>

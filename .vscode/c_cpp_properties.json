@@ -1,0 +1,26 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/hosuripa/grandslam_ws/install/robot_localization/include/**",
+        "/home/hosuripa/grandslam_ws/install/openslam_gmapping/include/**",
+        "/home/hosuripa/grandslam_ws/install/interfaces/include/**",
+        "/opt/ros/foxy/include/**",
+        "/home/hosuripa/grandslam_ws/src/grandslam_ros2/robot_localization/include/**",
+        "/home/hosuripa/grandslam_ws/src/grandslam_ros2/slam_gmapping/openslam_gmapping/include/**",
+        "/home/hosuripa/grandslam_ws/src/grandslam_ros2/slam_gmapping/slam_gmapping/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
