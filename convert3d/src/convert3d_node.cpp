@@ -22,7 +22,7 @@ public:
             "/scan", 10, std::bind(&Convert3D::scanCallback, this, std::placeholders::_1));
         encoder_sub_ = this->create_subscription<std_msgs::msg::Float32>(
             "/encoder", 10, std::bind(&Convert3D::encoderCallback, this, std::placeholders::_1));
-        cloud_pub_ = this->create_publisher<sensor_msgs::msg::PointCloud2>("/scan/converted", 10);
+        cloud_pub_ = this->create_publisher<sensor_msgs::msg::PointCloud2>("/lidar/converted", 10);
     }
 
 private:
