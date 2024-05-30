@@ -29,7 +29,7 @@
 
   <!--sensor_box LINK-->
   <joint name="sensor_box_link" type="fixed">
-    <origin xyz="0.0 -0.1 0.335" rpy="0.0 0.0 0.0"/>
+    <origin xyz="-0.1 0.0 0.335" rpy="0.0 0.0 0.0"/>
     <parent link="base_link"/>
     <child link ="sensor_box"/>
   </joint>
@@ -51,7 +51,7 @@
   <link name="base_link">
     <visual>
       <geometry>
-        <box size="0.75 1.30 0.47"/>
+        <box size="1.30 0.75 0.47"/>
       </geometry>
       <material name="blue"/>
     </visual>
@@ -61,7 +61,7 @@
   <link name="sensor_box">
     <visual>
       <geometry>
-        <box size="0.4 0.3 0.2"/>
+        <box size="0.3 0.4 0.2"/>
       </geometry>
       <material name="green"/>
     </visual>
