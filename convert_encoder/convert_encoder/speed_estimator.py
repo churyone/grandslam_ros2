@@ -11,24 +11,33 @@ class SpeedEstimator(Node):
         self.subscription_encoder = self.create_subscription(Float32, 'speed_topic', self.encoder_callback, 10)
         self.publisher_speed = self.create_publisher(Float32, 'vehicle/speed', 10)
 
-        self.roll = 0.0
+        self.yaw = 0.0
         self.encoder_speed = 0.0
 
     def imu_callback(self, msg):
-        # Extract roll from IMU data
-        accel_x = msg.linear_acceleration.x
-        accel_y = msg.linear_acceleration.y
-        accel_z = msg.linear_acceleration.z
+        # Extract yaw from IMU data (converting quaternion to euler angles)
+        self.yaw = self.quaternion_to_euler_yaw(msg.orientation)
 
-        self.roll = np.arctan2(accel_y, accel_z)
+    def quaternion_to_euler_yaw(self, orientation):
+        # Convert quaternion to euler yaw angle
+        x = orientation.x
+        y = orientation.y
+        z = orientation.z
+        w = orientation.w
+
+        siny_cosp = 2 * (w * z + x * y)
+        cosy_cosp = 1 - 2 * (y * y + z * z)
+        yaw = np.arctan2(siny_cosp, cosy_cosp)
+
+        return yaw
 
     def encoder_callback(self, msg):
         self.encoder_speed = msg.data
         self.calculate_speed()
 
     def calculate_speed(self):
-        # Adjust encoder speed using roll angle
-        adjusted_speed = self.encoder_speed * np.cos(self.roll)
+        # Adjust encoder speed using yaw angle
+        adjusted_speed = self.encoder_speed * np.cos(self.yaw)
 
         # Publish the adjusted speed
         speed_msg = Float32()
@@ -46,3 +55,4 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+

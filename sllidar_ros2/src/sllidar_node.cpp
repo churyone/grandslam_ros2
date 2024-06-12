@@ -35,6 +35,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/laser_scan.hpp>
 #include <std_srvs/srv/empty.hpp>
+#include "std_msgs/msg/float32.hpp"
 #include "sl_lidar.h"
 #include "math.h"
 
@@ -58,9 +59,10 @@ class SLlidarNode : public rclcpp::Node
     SLlidarNode()
     : Node("sllidar_node")
     {
-
+      encoder_sub_ = this->create_subscription<std_msgs::msg::Float32>("/angle_topic", 10, std::bind(&SLlidarNode::encoderCallback, this, std::placeholders::_1));
       scan_pub = this->create_publisher<sensor_msgs::msg::LaserScan>("scan", rclcpp::QoS(rclcpp::KeepLast(10)));
-      
+      raw_scan_pub = this->create_publisher<sensor_msgs::msg::LaserScan>("raw_scan", rclcpp::QoS(rclcpp::KeepLast(10)));
+      pitch_rad_encoder_ = 0.0;
     }
 
   private:    
@@ -94,6 +96,10 @@ class SLlidarNode : public rclcpp::Node
             this->get_parameter_or<float>("scan_frequency", scan_frequency, 20.0);
         else
             this->get_parameter_or<float>("scan_frequency", scan_frequency, 10.0);
+    }
+    void encoderCallback(const std_msgs::msg::Float32::SharedPtr msg)
+    {
+        pitch_rad_encoder_ = -1* msg->data; // !!!만약 msg가 rad가 아닌 deg로 들어온다면 변환 필요!!!
     }
 
     bool getSLLIDARDeviceInfo(ILidarDriver * drv)
@@ -250,8 +256,10 @@ class SLlidarNode : public rclcpp::Node
                 scan_msg->intensities[node_count-1-i] = (float) (nodes[i].quality >> 2);
             }
         }
-
-        pub->publish(*scan_msg);
+        raw_scan_pub->publish(*scan_msg);
+        if(pitch_rad_encoder_ >= -0.10 && pitch_rad_encoder_ <= 0.10){
+            pub->publish(*scan_msg);
+        }
     }
 public:    
     int work_loop()
@@ -443,9 +451,10 @@ public:
 
   private:
     rclcpp::Publisher<sensor_msgs::msg::LaserScan>::SharedPtr scan_pub;
+    rclcpp::Publisher<sensor_msgs::msg::LaserScan>::SharedPtr raw_scan_pub;
     rclcpp::Service<std_srvs::srv::Empty>::SharedPtr start_motor_service;
     rclcpp::Service<std_srvs::srv::Empty>::SharedPtr stop_motor_service;
-
+    rclcpp::Subscription<std_msgs::msg::Float32>::SharedPtr encoder_sub_;
     std::string channel_type;
     std::string tcp_ip;
     std::string udp_ip;
@@ -460,7 +469,7 @@ public:
     size_t angle_compensate_multiple = 1;//it stand of angle compensate at per 1 degree
     std::string scan_mode;
     float scan_frequency;
-
+    double pitch_rad_encoder_;
     ILidarDriver * drv;    
 };
 

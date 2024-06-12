@@ -27,7 +27,7 @@ class TFToOdometryNode(Node):
             self.get_logger().info(f'Looking up transform at time: {now}')
             
             # odom에서 base_footprint로의 트랜스폼을 조회
-            transform: TransformStamped = self.tf_buffer.lookup_transform('odom', 'base_footprint', now)
+            transform: TransformStamped = self.tf_buffer.lookup_transform('map', 'odom', now)
             
             # 트랜스폼 수신 로그 추가
             self.get_logger().info(f'Transform received: {transform}')
@@ -35,9 +35,9 @@ class TFToOdometryNode(Node):
             # Create an Odometry message and populate it with the transform data
             odom_msg = Odometry()
             odom_msg.header.stamp = self.get_clock().now().to_msg()
-            odom_msg.header.frame_id = 'odom'
-            odom_msg.child_frame_id = 'base_footprint'
-            
+            odom_msg.header.frame_id = 'map'
+            odom_msg.child_frame_id = 'odom'
+          
             # 트랜스폼 데이터를 사용하여 오도메트리 메시지를 채움
             odom_msg.pose.pose.position.x = transform.transform.translation.x
             odom_msg.pose.pose.position.y = transform.transform.translation.y

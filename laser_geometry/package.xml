@@ -49,5 +49,8 @@
 
   <export>
     <build_type>ament_cmake</build_type>
+    <launch>
+      <launch_file>launch/your_launch_file.launch.py</launch_file>
+    </launch>
   </export>
 </package>
