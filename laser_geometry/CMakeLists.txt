@@ -78,4 +78,11 @@ if(BUILD_TESTING)
   endif()
 endif()
 
+add_executable(laser_geometry_node src/laser_geometry_node.cpp)
+ament_target_dependencies(laser_geometry_node rclcpp sensor_msgs tf2 laser_geometry)
+install(TARGETS
+  laser_geometry_node
+  DESTINATION lib/${PROJECT_NAME})
+
+
 ament_package()
